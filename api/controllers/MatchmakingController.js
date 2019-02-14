@@ -22,7 +22,7 @@ module.exports = {
             matchesValues.push(singleTaste);
         });
         let orderedMatches = matchesValues.sort(function(a, b) {
-            return  b.percentage < a.percentage;
+            return  a.percentage < b.percentage;
         });
         if(everyoneTaste.length>20){
             const bestMatches = orderedMatches.slice(Math.max(orderedMatches.length - 20, 1))

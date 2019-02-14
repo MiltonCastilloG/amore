@@ -46,7 +46,7 @@ module.exports = {
       }, async function (err, uploadedFiles) {
         let newUser;
         if (!err && uploadedFiles[0] !== undefined && uploadedFiles[0] !== null) {
-          let uploading = uploadedFiles[0].fd.split("\\");
+          let uploading = uploadedFiles[0].fd.split("/");
           newUserInfo.profilePhoto =  uploading[uploading.length-1];
           newUser = await User.create(newUserInfo).fetch();
           return res.send(newUser);

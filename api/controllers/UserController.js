@@ -18,6 +18,7 @@ module.exports = {
   },
 
   signup: async (req, res) => {
+    console.log(req.body);
     let replacedAge = req.body.age.replace("-", "/");
     let today = new Date();
     let birthDate = new Date(replacedAge);
@@ -41,7 +42,7 @@ module.exports = {
 
     if(!findUser){
       req.file('profilePhoto').upload({
-        dirname: require('path').resolve(sails.config.appPath, '/profile_pics')
+        dirname: require('path').resolve(sails.config.appPath, '/public/uploads')
       }, async function (err, uploadedFiles) {
         let newUser;
         if (!err && uploadedFiles[0] !== undefined && uploadedFiles[0] !== null) {
@@ -61,6 +62,7 @@ module.exports = {
   },
 
   loginGoogle: async (req, res) => {
+    console.log(req.body);
     const { email } = req.body;
     const findUser = await User.findOne({email});
     let resJSON = {};
@@ -71,6 +73,13 @@ module.exports = {
       };
     }
     else{
+      let loggedUserTaste = await Taste.findOne({email: findUser.email});
+      if(!loggedUserTaste){
+        findUser.taste = "no taste";
+      }
+      else{
+        findUser.taste = loggedUserTaste;
+      }
       resJSON = {
         user: findUser,
         type: 'old'
@@ -120,7 +129,7 @@ module.exports = {
   updateProfilePhoto: async (req, res) => {
     const { email } = req.body;
     req.file('profilePhoto').upload({
-      dirname: require('path').resolve(sails.config.appPath, '/profile_pics')
+      dirname: require('path').resolve(sails.config.appPath, '/public/uploads')
     }, async function (err, uploadedFiles) {
       if (err) return res.serverError(err);
 
@@ -130,14 +139,4 @@ module.exports = {
       return res.send(newPhoto);
     });
   },
-  show: function(req, res) {
-    var fs = require('fs');
-    var path = sails.config.appPath+'/assets/images/avatars/thumbnails/'+req.param('thumb');
-    fs.exists(path, function(exists) {
-       if (exists) 
-        console.log("hello");
-
-    });
-  }
-
 };

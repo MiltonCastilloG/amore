@@ -42,7 +42,7 @@ module.exports = {
 
     if(!findUser){
       req.file('profilePhoto').upload({
-        dirname: require('path').resolve(sails.config.appPath, '/profile_pics')
+        dirname: require('path').resolve(sails.config.appPath, '/public/uploads')
       }, async function (err, uploadedFiles) {
         let newUser;
         if (!err && uploadedFiles[0] !== undefined && uploadedFiles[0] !== null) {
